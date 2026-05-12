@@ -32,7 +32,7 @@ function AutoResizeTextarea({ value, onChange, className, style, autoFocus, onBl
         resize();
       }}
       className={className}
-      style={{ ...style, overflow: 'hidden', resize: 'none', width: '100%', minWidth: '100%' }}
+      style={{ ...style, overflow: 'hidden', resize: 'none' }}
       autoFocus={autoFocus}
       onBlur={onBlur}
     />
@@ -78,12 +78,12 @@ const PdfMessage = React.memo(({
             </div>
           )}
           {editingInlineIdx === idx ? (
-            <AutoResizeTextarea
+              <AutoResizeTextarea
               autoFocus
               onBlur={() => setEditingInlineIdx(null)}
               value={msg.content}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleMessageChange(idx, e.target.value)}
-              className="w-full min-w-full block bg-transparent border-none focus:ring-0 p-0 m-0 resize-none outline-none font-sans"
+              className="w-[500px] max-w-full block bg-transparent border-none focus:ring-0 p-0 m-0 resize-none outline-none font-sans"
               style={{ minHeight: '100px', color: 'inherit' }}
             />
           ) : (
