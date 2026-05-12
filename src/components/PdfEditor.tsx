@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { X, Download, FileText, ChevronRight, CheckCircle2, FileDown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
 import { toast } from 'sonner';
@@ -101,6 +102,7 @@ const PdfMessage = React.memo(({
               <div className="absolute -inset-2 border-2 border-dashed border-transparent group-hover:border-blue-400/30 rounded-lg pointer-events-none transition-colors hidden sm:block"></div>
               <ReactMarkdown 
                 remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
                 components={{
                 pre: ({ node, ...props }) => (
                   <pre 
@@ -131,7 +133,7 @@ const PdfMessage = React.memo(({
                 )
               }}
             >
-              {msg.content}
+              {msg.content_html || msg.content}
             </ReactMarkdown>
           </div>
           )}
@@ -233,10 +235,10 @@ export function PdfEditor({ chatData, onClose }: PdfEditorProps) {
                    ],
                    spacing: { before: 200, after: 100 }
                  }),
-                 ...msg.content.split('\n').map(line => new Paragraph({
+                 ...(msg.content.replace(/<[^>]+>/g, '').split('\n').map(line => new Paragraph({
                    children: [ new TextRun({ text: line, size: 22 }) ],
                    spacing: { after: 100 }
-                 }))
+                 })))
               ])
             ],
           },
