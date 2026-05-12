@@ -55,7 +55,7 @@ async function extractChatViaAxios(url: string) {
   let data = "";
   let usedPuppeteer = false;
   
-  const browserlessToken = process.env.BROWSERLESS_TOKEN || "2UUaQFRvjHXBtgr8fefbc37d4cfbd5740af20de1d8e200498";
+  const browserlessToken = process.env.BROWSERLESS_TOKEN || "2UUaQFRvjHXBtgr795905758f6356784b8fd41eb7bf39d987";
   
   try {
     const browser = await puppeteer.connect({

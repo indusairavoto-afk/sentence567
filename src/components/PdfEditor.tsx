@@ -32,7 +32,7 @@ function AutoResizeTextarea({ value, onChange, className, style, autoFocus, onBl
         resize();
       }}
       className={className}
-      style={{ ...style, overflow: 'hidden', resize: 'none' }}
+      style={{ ...style, overflow: 'hidden', resize: 'none', width: '100%', minWidth: '100%' }}
       autoFocus={autoFocus}
       onBlur={onBlur}
     />
@@ -67,7 +67,7 @@ const PdfMessage = React.memo(({
         >
           {msg.role}
         </div>
-        <div className={`prose max-w-none w-full ${fontSize === 'sm' ? 'prose-sm' : fontSize === 'lg' ? 'prose-lg' : 'prose-base'} ${currentTheme.proseClass} ${
+        <div className={`prose max-w-none w-full ${editingInlineIdx === idx ? 'min-w-[300px] sm:min-w-[500px]' : ''} ${fontSize === 'sm' ? 'prose-sm' : fontSize === 'lg' ? 'prose-lg' : 'prose-base'} ${currentTheme.proseClass} ${
           msg.role === 'user' ? currentTheme.userBubble : currentTheme.assistantBubble
         }`} style={{ wordBreak: 'break-word' }}>
           {msg.images && msg.images.length > 0 && (
@@ -78,13 +78,13 @@ const PdfMessage = React.memo(({
             </div>
           )}
           {editingInlineIdx === idx ? (
-              <AutoResizeTextarea
+            <AutoResizeTextarea
               autoFocus
               onBlur={() => setEditingInlineIdx(null)}
               value={msg.content}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleMessageChange(idx, e.target.value)}
-              className="w-[500px] max-w-full block bg-transparent border-none focus:ring-0 p-0 m-0 resize-none outline-none font-sans"
-              style={{ minHeight: '100px', color: 'inherit' }}
+              className="w-full min-w-full block bg-transparent border-none focus:ring-0 p-0 m-0 resize-none outline-none font-sans"
+              style={{ minHeight: '100px', width: '100%', color: 'inherit' }}
             />
           ) : (
             <div 
@@ -214,7 +214,7 @@ export function PdfEditor({ chatData, onClose }: PdfEditorProps) {
     },
     'gemini': {
       bg: 'bg-[#ffffff]', text: 'text-[#1f1f1f]', titleBorder: 'border-[#f0f4f9]',
-      userBubble: 'bg-[#f0f4f9] text-[#1f1f1f] rounded-[24px] px-5 py-4 shadow-none flex justify-end',
+      userBubble: 'bg-[#f0f4f9] text-[#1f1f1f] rounded-[24px] px-5 py-4 shadow-none',
       assistantBubble: 'bg-transparent text-[#1f1f1f]',
       role: 'text-[#444746] font-medium text-sm', footer: 'text-[#747775] border-[#f0f4f9]',
       proseClass: 'prose-zinc', isDark: false,
