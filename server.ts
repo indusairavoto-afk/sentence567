@@ -58,39 +58,29 @@ async function extractChatViaAxios(url: string) {
   const browserlessToken = process.env.BROWSERLESS_TOKEN || "2UUaQFRvjHXBtgr795905758f6356784b8fd41eb7bf39d987";
   
   try {
-    const browser = await puppeteer.connect({
-      browserWSEndpoint: `wss://chrome.browserless.io?token=${browserlessToken}&stealth=true`
+    usedPuppeteer = true;
+    console.log("Fetching via Browserless /content API...");
+    const response = await axios.post(`https://chrome.browserless.io/content?token=${browserlessToken}`, {
+      url: url,
+      elements: [{ selector: "[data-message-author-role]" }], // ensure we wait for this
+      stealth: true,
+      gotoOptions: {
+        waitUntil: "networkidle2",
+        timeout: 30000
+      }
+    }, {
+      headers: { "Content-Type": "application/json", "Cache-Control": "no-cache" },
+      timeout: 35000
     });
     
-    try {
-      usedPuppeteer = true;
-      const page = await browser.newPage();
-      await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-      await page.setExtraHTTPHeaders({
-         "Accept-Language": "en-US,en;q=0.9",
-      });
-      await page.setViewport({ width: 1280, height: 800 });
-
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 35000 });
-      
-      // Wait for ChatGPT rendering or Cloudflare challenge to resolve
-      try {
-        await page.waitForSelector('[data-message-author-role]', { timeout: 10000 });
-      } catch (e) {
-        // Fallback wait just in case
-        await new Promise(r => setTimeout(r, 2000));
-      }
-      
-      data = await page.content();
-      
-      if (data.includes('404<!-- --> <!-- -->Not Found') || data.includes('<title>404 Not Found</title>')) {
-        throw new Error("CHAT_DELETED");
-      }
-    } finally {
-      await browser.close();
+    data = response.data;
+    
+    if (data.includes('404<!-- --> <!-- -->Not Found') || data.includes('<title>404 Not Found</title>')) {
+      throw new Error("CHAT_DELETED");
     }
   } catch (error: any) {
-    console.error("Puppeteer fetch failed, falling back to axios proxy:", error.message);
+    console.error("Browserless REST fetch failed, falling back to proxy:", error.message);
+    if (error.response?.data) console.error("Browserless Error HTML:", error.response.data);
     if (error.message && error.message.includes("CHAT_DELETED")) throw error;
     
     // Fallback to Jina Reader proxy
