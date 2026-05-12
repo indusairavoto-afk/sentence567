@@ -32,7 +32,7 @@ function AutoResizeTextarea({ value, onChange, className, style, autoFocus, onBl
         resize();
       }}
       className={className}
-      style={{ ...style, overflow: 'hidden', resize: 'none' }}
+      style={{ ...style, overflow: 'hidden', resize: 'none', width: '100%', minWidth: '100%' }}
       autoFocus={autoFocus}
       onBlur={onBlur}
     />
@@ -67,7 +67,7 @@ const PdfMessage = React.memo(({
         >
           {msg.role}
         </div>
-        <div className={`prose ${fontSize === 'sm' ? 'prose-sm' : fontSize === 'lg' ? 'prose-lg' : 'prose-base'} ${currentTheme.proseClass} ${
+        <div className={`prose max-w-none w-full ${fontSize === 'sm' ? 'prose-sm' : fontSize === 'lg' ? 'prose-lg' : 'prose-base'} ${currentTheme.proseClass} ${
           msg.role === 'user' ? currentTheme.userBubble : currentTheme.assistantBubble
         }`} style={{ wordBreak: 'break-word' }}>
           {msg.images && msg.images.length > 0 && (
@@ -83,7 +83,7 @@ const PdfMessage = React.memo(({
               onBlur={() => setEditingInlineIdx(null)}
               value={msg.content}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleMessageChange(idx, e.target.value)}
-              className="w-full bg-transparent border-none focus:ring-0 p-0 m-0 resize-none outline-none font-sans"
+              className="w-full min-w-full block bg-transparent border-none focus:ring-0 p-0 m-0 resize-none outline-none font-sans"
               style={{ minHeight: '100px', color: 'inherit' }}
             />
           ) : (
