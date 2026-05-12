@@ -152,10 +152,10 @@ export function PdfEditor({ chatData, onClose }: PdfEditorProps) {
   const [pageSize, setPageSize] = useState<'a4' | 'letter' | 'legal'>('a4');
   const [margin, setMargin] = useState<number>(20); // in mm
   const [fontSize, setFontSize] = useState<'sm' | 'base' | 'lg'>('sm');
-  const [pdfTheme, setPdfTheme] = useState<'minimal-light' | 'minimal-dark' | 'chatgpt-classic' | 'notion-style' | 'ocean-breeze'>('ocean-breeze');
+  const [pdfTheme, setPdfTheme] = useState<'minimal-light' | 'minimal-dark' | 'chatgpt-classic' | 'notion-style' | 'ocean-breeze' | 'claude' | 'grok' | 'deepseek' | 'gemini'>('ocean-breeze');
   const [editingInlineIdx, setEditingInlineIdx] = useState<number | null>(null);
 
-  const THEMES = {
+  const THEMES: Record<string, any> = {
     'minimal-light': {
       bg: 'bg-white', text: 'text-gray-900', titleBorder: 'border-gray-200',
       userBubble: 'bg-gray-100 text-gray-900 border border-gray-200 rounded-3xl rounded-tr-sm px-5 py-4',
@@ -190,6 +190,34 @@ export function PdfEditor({ chatData, onClose }: PdfEditorProps) {
       assistantBubble: 'bg-white text-[#334155] rounded-3xl px-6 py-4 shadow-sm border border-[#e2e8f0]',
       role: 'text-[#38bdf8]', footer: 'text-[#94a3b8] border-[#bae6fd]',
       proseClass: 'prose-slate', isDark: false,
+    },
+    'claude': {
+      bg: 'bg-[#fdfcfb]', text: 'text-[#1e1e1e]', titleBorder: 'border-[#eae8e4]',
+      userBubble: 'bg-[#eae8e4] text-[#1e1e1e] rounded-xl px-5 py-3 shadow-none',
+      assistantBubble: 'bg-transparent text-[#1e1e1e]',
+      role: 'text-[#8b8882] capitalize font-medium', footer: 'text-[#9b9a97] border-[#eae8e4]',
+      proseClass: 'prose-stone', isDark: false,
+    },
+    'grok': {
+      bg: 'bg-[#000000]', text: 'text-[#e7e9ea]', titleBorder: 'border-[#2f3336]',
+      userBubble: 'bg-[#1d9bf0] text-white rounded-[20px] px-5 py-3 shadow-sm',
+      assistantBubble: 'bg-transparent text-[#e7e9ea]',
+      role: 'text-[#71767b] lowercase font-bold tracking-tight', footer: 'text-[#71767b] border-[#2f3336]',
+      proseClass: 'prose-invert prose-blue', isDark: true,
+    },
+    'deepseek': {
+      bg: 'bg-[#ffffff]', text: 'text-[#0f172a]', titleBorder: 'border-[#f1f5f9]',
+      userBubble: 'bg-[#f8fafc] text-[#0f172a] rounded-lg px-5 py-4 shadow-sm border border-[#e2e8f0]',
+      assistantBubble: 'bg-[#ffffff] text-[#0f172a] rounded-lg px-5 py-4 shadow-sm border border-[#e2e8f0]',
+      role: 'text-[#64748b] font-medium tracking-wide uppercase text-xs', footer: 'text-[#94a3b8] border-[#f1f5f9]',
+      proseClass: 'prose-slate', isDark: false,
+    },
+    'gemini': {
+      bg: 'bg-[#ffffff]', text: 'text-[#1f1f1f]', titleBorder: 'border-[#f0f4f9]',
+      userBubble: 'bg-[#f0f4f9] text-[#1f1f1f] rounded-[24px] px-5 py-4 shadow-none flex justify-end',
+      assistantBubble: 'bg-transparent text-[#1f1f1f]',
+      role: 'text-[#444746] font-medium text-sm', footer: 'text-[#747775] border-[#f0f4f9]',
+      proseClass: 'prose-zinc', isDark: false,
     }
   };
 
@@ -339,6 +367,10 @@ export function PdfEditor({ chatData, onClose }: PdfEditorProps) {
                   <option value="chatgpt-classic">ChatGPT Classic</option>
                   <option value="notion-style">Notion Style</option>
                   <option value="ocean-breeze">Ocean Breeze</option>
+                  <option value="claude">Claude</option>
+                  <option value="grok">Grok</option>
+                  <option value="deepseek">DeepSeek</option>
+                  <option value="gemini">Gemini</option>
                 </select>
               </div>
               <div className="flex flex-col gap-1">
